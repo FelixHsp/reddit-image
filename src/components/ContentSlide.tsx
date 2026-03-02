@@ -6,7 +6,18 @@ interface ContentProps {
   index: number;
 }
 
+const getTextSize = (enLen: number, zhLen: number): string => {
+  const total = enLen + zhLen;
+  if (total < 100) return 'text-5xl';
+  if (total < 300) return 'text-4xl';
+  if (total < 700) return 'text-3xl';
+  if (total < 1000) return 'text-2xl';
+  return 'text-lg';
+};
+
 export const ContentSlide: React.FC<ContentProps> = ({ content }) => {
+  const textSize = getTextSize(content.textEn.length, content.textZh.length);
+
   // Simple function to parse bold text (surrounded by **) and apply highlight
   const renderHighlightedText = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
@@ -43,7 +54,7 @@ export const ContentSlide: React.FC<ContentProps> = ({ content }) => {
 
         {/* English Text Box */}
         <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mt-4">
-          <p className="text-[#1A1A1B] text-3xl leading-relaxed">
+          <p className={`text-[#1A1A1B] ${textSize} leading-relaxed`}>
             {renderHighlightedText(content.textEn)}
           </p>
         </div>
@@ -53,7 +64,7 @@ export const ContentSlide: React.FC<ContentProps> = ({ content }) => {
 
         {/* Chinese Translation Box */}
         <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-          <p className="text-gray-800 text-3xl leading-relaxed">
+          <p className={`text-gray-800 ${textSize} leading-relaxed`}>
             {content.textZh}
           </p>
         </div>

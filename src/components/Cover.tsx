@@ -13,19 +13,9 @@ export const Cover: React.FC<CoverProps> = ({ data }) => {
       style={{ fontFamily: 'Inter, sans-serif' }}
     >
       {/* Top Header */}
-      <div className="mt-16 flex items-center gap-3">
-        <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center overflow-hidden border-[3px] border-white shadow-sm">
-          {/* Simple Reddit Logo Approximation using CSS shapes */}
-          <div className="relative w-full h-full bg-[#ff4500] flex items-center justify-center">
-            <svg viewBox="0 0 20 20" className="w-9 h-9 text-white fill-current">
-              <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM6.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm7 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm-3.5 6a3.5 3.5 0 0 1-3.3-2.3.5.5 0 1 1 .9-.4 2.5 2.5 0 0 0 4.8 0 .5.5 0 1 1 .9.4A3.5 3.5 0 0 1 10 15z" />
-            </svg>
-          </div>
-        </div>
-        <div className="text-white text-3xl font-medium tracking-wide flex items-center gap-2">
-          <span>reddit</span>
-          <span className="font-bold">高赞问答</span>
-        </div>
+      <div className="mt-16 flex items-center gap-4 bg-white rounded-full px-6 py-3 shadow-md">
+        <img src="/reddit.svg" alt="reddit" className="h-10" />
+        <span className="text-[#ff4500] text-3xl font-bold tracking-wide">高赞问答</span>
       </div>
 
       {/* Main Chinese Title */}
@@ -39,8 +29,8 @@ export const Cover: React.FC<CoverProps> = ({ data }) => {
       <div className="absolute bottom-16 w-[720px] bg-white rounded-2xl shadow-2xl overflow-hidden p-8">
         {/* Post Meta */}
         <div className="flex items-center gap-3 text-gray-500 text-lg mb-4">
-          <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
-            <div className="w-full h-full bg-[#ff4500]"></div>
+          <div className="w-8 h-8 rounded-full overflow-hidden">
+            <img src="/ask.webp" alt="subreddit" className="w-full h-full object-cover" />
           </div>
           <span className="font-medium text-gray-800">{data.subreddit}</span>
           <span>•</span>

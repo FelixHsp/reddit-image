@@ -1,73 +1,100 @@
-# React + TypeScript + Vite
+# Reddit Image Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+将 Reddit 帖子数据生成封面图与内容滑动图，并支持批量导出为 ZIP 包。
 
-Currently, two official plugins are available:
+## 快速开始
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 使用方式
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+在左侧 JSON 输入框中粘贴符合格式的数据，点击 **Load Data**，右侧预览区将实时渲染封面图和每条评论的内容滑动图。点击 **Export ZIP** 可将所有图片打包下载。
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 数据格式
+
+输入数据为一个 `ThreadData` JSON 对象。
+
+### `ThreadData`
+
+```json
+{
+  "mainQuestionZh": "你因为什么小事改变了整个人生？",
+  "subreddit": "r/AskReddit",
+  "time": "20小时前",
+  "author": "u/nathannnate01",
+  "titleEn": "What's a decision you made in under 10 seconds that changed your life forever?",
+  "quoteEn": "\"Oftentimes, change comes not from what we start doing, but from what we choose to stop.\"",
+  "upvotes": "6.4K",
+  "comments": "2.1K",
+  "contents": [
+    {
+      "id": "1",
+      "author": "jesusinatre2x4",
+      "textEn": "Ended up **hitting it off** with the woman making my sandwich.",
+      "textZh": "结果我和给我做三明治的那位女士聊得特别投机。"
+    }
+  ]
+}
 ```
+
+### `ThreadData` 字段说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|---|---|:---:|---|
+| `mainQuestionZh` | `string` | ✅ | 封面图大标题（中文） |
+| `subreddit` | `string` | ✅ | 子版块名，含前缀，如 `r/AskReddit` |
+| `time` | `string` | ✅ | 发帖时间，如 `20小时前`、`3天前` |
+| `author` | `string` | ✅ | 楼主用户名，含前缀，如 `u/username` |
+| `titleEn` | `string` | ✅ | 帖子英文原标题，显示在封面卡片中 |
+| `quoteEn` | `string` | ❌ | 可选引用语，显示在封面卡片底部 |
+| `upvotes` | `string` | ✅ | 点赞数，如 `6.4K`、`12.3K` |
+| `comments` | `string` | ✅ | 评论数，如 `2.1K`、`834` |
+| `contents` | `ContentData[]` | ✅ | 评论条目数组，每条生成一张内容滑动图 |
+
+---
+
+### `ContentData` 字段说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|---|---|:---:|---|
+| `id` | `string` | ✅ | 唯一标识符，用于列表渲染 key |
+| `author` | `string` | ✅ | 评论者用户名（不含 `u/` 前缀） |
+| `textEn` | `string` | ✅ | 英文原文，支持 `**文字**` 语法高亮显示 |
+| `textZh` | `string` | ✅ | 对应中文翻译 |
+
+#### `textEn` 高亮语法
+
+在英文正文中用 `**...**` 包裹的文字会以高亮色块形式渲染，用于标注关键词或短语：
+
+```
+"Ended up **hitting it off** with the woman making my sandwich."
+```
+
+---
+
+## 项目结构
+
+```
+src/
+├── types.ts              # 类型定义 (ThreadData, ContentData) 及默认示例数据
+├── App.tsx               # 根组件，管理状态与导出逻辑
+└── components/
+    ├── Cover.tsx         # 封面图组件 (800×1066px)
+    ├── ContentSlide.tsx  # 内容滑动图组件 (800×1066px)
+    └── JSONInput.tsx     # JSON 数据输入面板
+```
+
+## 技术栈
+
+| 包 | 用途 |
+|---|---|
+| React 19 + TypeScript | UI 框架 |
+| Vite + Tailwind CSS v4 | 构建工具与样式 |
+| `html-to-image` | DOM 节点转 PNG |
+| `jszip` + `file-saver` | 批量打包下载 ZIP |
+| `lucide-react` | 图标库 |
