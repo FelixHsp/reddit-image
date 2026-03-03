@@ -77,6 +77,39 @@ npm run dev
 
 ---
 
+### `VocabItem` 字段说明（可选）
+
+在 `ThreadData` 中添加 `vocab` 数组后，会在所有内容图末尾**额外生成一张词汇学习图**。
+
+| 字段 | 类型 | 必填 | 说明 |
+|---|---|:---:|---|
+| `word` | `string` | ✅ | 英文单词或短语 |
+| `phonetic` | `string` | ❌ | 音标，如 `/ɡʌt ˈfiːlɪŋ/` |
+| `trans` | `string` | ✅ | 中文释义 |
+| `note` | `string` | ❌ | 用法备注或例句说明 |
+
+**示例：**
+
+```json
+"vocab": [
+  {
+    "word": "gut feeling",
+    "phonetic": "/ɡʌt ˈfiːlɪŋ/",
+    "trans": "直觉；本能感应",
+    "note": "指无法用逻辑解释的强烈预感"
+  },
+  {
+    "word": "brush off",
+    "phonetic": "/brʌʃ ɒf/",
+    "trans": "忽视；置之不理"
+  }
+]
+```
+
+> 不填 `vocab` 字段（或设为空数组）时，不会生成词汇图。
+
+---
+
 ## 项目结构
 
 ```

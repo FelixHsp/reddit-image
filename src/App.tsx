@@ -6,6 +6,7 @@ import { defaultData } from './types';
 import type { ThreadData } from './types';
 import { Cover } from './components/Cover';
 import { ContentSlide } from './components/ContentSlide';
+import { VocabSlide } from './components/VocabSlide';
 import { JSONInput } from './components/JSONInput';
 import { Download } from 'lucide-react';
 
@@ -14,6 +15,7 @@ function App() {
   const [isExporting, setIsExporting] = useState(false);
   const coverRef = useRef<HTMLDivElement>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const vocabRef = useRef<HTMLDivElement>(null);
 
   const handleExportAll = async () => {
     if (!coverRef.current) return;
@@ -40,6 +42,13 @@ function App() {
         }
       }
 
+      // Generate vocab image
+      const hasVocab = data.contents.some(c => c.vocab?.length);
+      if (hasVocab && vocabRef.current) {
+        const vocabDataUrl = await toPng(vocabRef.current, { cacheBust: true, pixelRatio: 2 });
+        zip.file(`${String(data.contents.length + 1).padStart(2, '0')}-vocab.png`, vocabDataUrl.split(',')[1], { base64: true });
+      }
+
       // Download zip
       const content = await zip.generateAsync({ type: 'blob' });
       saveAs(content, 'reddit-images.zip');
@@ -64,6 +73,11 @@ function App() {
             <ContentSlide content={content} index={index} />
           </div>
         ))}
+        {data.contents.some(c => c.vocab?.length) && (
+          <div ref={vocabRef}>
+            <VocabSlide vocab={data.contents.flatMap(c => c.vocab ?? [])} subreddit={data.subreddit} />
+          </div>
+        )}
       </div>
 
       <div className="w-full max-w-7xl flex flex-col items-center">
@@ -83,7 +97,9 @@ function App() {
         {/* Actions */}
         <div className="w-full max-w-2xl flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
           <div className="text-gray-600">
-            <span className="font-medium text-gray-900">{data.contents.length + 1}</span> images to generate
+            <span className="font-medium text-gray-900">
+              {data.contents.length + 1 + (data.contents.some(c => c.vocab?.length) ? 1 : 0)}
+            </span> images to generate
           </div>
           <button
             onClick={handleExportAll}
@@ -101,8 +117,9 @@ function App() {
             {/* Cover Preview */}
             <div className="flex flex-col items-center gap-4">
               <h3 className="font-semibold text-gray-700">Cover</h3>
-              <div className="border border-gray-200 rounded-lg overflow-hidden shadow-lg transform origin-top left" style={{ transform: 'scale(0.4)', height: '426px', width: '320px', marginBottom: '-640px', marginRight: '-480px' }}>
-                <div>
+              <div className="border border-gray-200 rounded-lg overflow-hidden shadow-lg"
+                style={{ width: 320, height: 426 }}>
+                <div style={{ transform: 'scale(0.4)', transformOrigin: 'top left', width: 800, height: 1066 }}>
                   <Cover data={data} />
                 </div>
               </div>
@@ -112,16 +129,27 @@ function App() {
             {data.contents.map((content, index) => (
               <div key={content.id} className="flex flex-col items-center gap-4">
                 <h3 className="font-semibold text-gray-700">Slide {index + 1}</h3>
-                <div className="border border-gray-200 rounded-lg overflow-hidden shadow-lg transform origin-top left" style={{ transform: 'scale(0.4)', height: '426px', width: '320px', marginBottom: '-640px', marginRight: '-480px' }}>
-                  <div>
-                    <ContentSlide 
-                      content={content} 
-                      index={index} 
-                    />
+                <div className="border border-gray-200 rounded-lg overflow-hidden shadow-lg"
+                  style={{ width: 320, height: 426 }}>
+                  <div style={{ transform: 'scale(0.4)', transformOrigin: 'top left', width: 800, height: 1066 }}>
+                    <ContentSlide content={content} index={index} />
                   </div>
                 </div>
               </div>
             ))}
+
+            {/* Vocab Preview */}
+            {data.contents.some(c => c.vocab?.length) && (
+              <div className="flex flex-col items-center gap-4">
+                <h3 className="font-semibold text-gray-700">词汇</h3>
+                <div className="border border-gray-200 rounded-lg overflow-hidden shadow-lg"
+                  style={{ width: 320, height: 426 }}>
+                  <div style={{ transform: 'scale(0.4)', transformOrigin: 'top left', width: 800, height: 1066 }}>
+                    <VocabSlide vocab={data.contents.flatMap(c => c.vocab ?? [])} subreddit={data.subreddit} />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
