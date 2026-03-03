@@ -21,7 +21,9 @@ export const Cover: React.FC<CoverProps> = ({ data }) => {
       {/* Main Chinese Title */}
       <div className="mt-20 px-12 text-center w-full">
         <h1 className="text-white text-6xl font-bold leading-[1.3] drop-shadow-md">
-          {data.mainQuestionZh}
+          {data.mainQuestionZh.split('\n').map((line, i, arr) => (
+            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+          ))}
         </h1>
       </div>
 
