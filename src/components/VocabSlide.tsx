@@ -96,18 +96,8 @@ export const VocabSlide: React.FC<VocabSlideProps> = ({ vocab: vocabRaw, subredd
                 </div>
               </div>
 
-              {/* Row 2: wordZh — context translation badge */}
-              <div className="flex items-center gap-2 pl-8">
-                <span className="text-gray-900 font-bold text-base">{item.wordZh}</span>
-                <span className="text-[9px] font-bold text-[#ff4500] border border-[#ff4500] rounded px-1 py-0.5 leading-none opacity-60">
-                  文中
-                </span>
-              </div>
-
-              {/* Row 3: trans — full meaning */}
-              <div className="pl-8 border-l-2 border-orange-200 ml-8">
-                <p className="text-gray-500 text-sm leading-snug">{item.trans}</p>
-              </div>
+              {/* trans — full meaning */}
+              <p className="pl-8 text-gray-700 font-medium text-base leading-snug">{item.trans}</p>
             </div>
           ))}
         </div>
