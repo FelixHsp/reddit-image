@@ -136,7 +136,7 @@ export const ContentSlide: React.FC<ContentProps> = ({ content }) => {
       <div className="flex items-center gap-4 px-10 py-5">
         <div className="flex-1 h-px bg-gray-200" />
         <div className="px-4 py-1.5 rounded-full border border-gray-200 bg-white shadow-sm">
-          <span className="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase">中文翻译</span>
+          <span className="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase">对照翻译</span>
         </div>
         <div className="flex-1 h-px bg-gray-200" />
       </div>

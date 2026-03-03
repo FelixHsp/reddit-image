@@ -63,7 +63,7 @@ export const VocabSlide: React.FC<VocabSlideProps> = ({ vocab: vocabRaw, subredd
         <div className="px-10 pt-10 pb-6 flex items-center justify-between">
           <div>
             <p className="text-sm font-bold tracking-[0.2em] text-[#ff4500] uppercase mb-1">{subreddit}</p>
-            <h2 className="text-4xl font-black text-gray-900 leading-tight">本期词汇</h2>
+            <h2 className="text-4xl font-black text-gray-900 leading-tight">学学词汇</h2>
             <p className="text-gray-400 text-lg mt-1">Vocabulary of the Week</p>
           </div>
           <div className="w-16 h-16 rounded-2xl bg-[#ff4500] flex items-center justify-center shadow-md flex-shrink-0">
