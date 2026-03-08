@@ -54,6 +54,8 @@ export const ContentSlide: React.FC<ContentProps> = ({ content }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const vocab: VocabItem[] = content.vocab ?? [];
 
+  const normalizedAuthor = (content.author ?? '').replace(/^\/?u\//i, '').trim();
+
   useLayoutEffect(() => { setSizeIdx(0); }, [content.id]);
 
   useLayoutEffect(() => {
@@ -94,7 +96,7 @@ export const ContentSlide: React.FC<ContentProps> = ({ content }) => {
     return applyHighlights(text, zhRegex, zhSet);
   };
 
-  const initial = content.author?.[0]?.toUpperCase() ?? 'U';
+  const initial = normalizedAuthor?.[0]?.toUpperCase() ?? 'U';
 
   return (
     <div
@@ -114,7 +116,7 @@ export const ContentSlide: React.FC<ContentProps> = ({ content }) => {
           <span className="text-white font-bold text-lg">{initial}</span>
         </div>
         <div>
-          <p className="font-bold text-gray-900 text-xl leading-tight">u/{content.author}</p>
+          <p className="font-bold text-gray-900 text-xl leading-tight">u/{normalizedAuthor}</p>
           <p className="text-sm text-gray-400 tracking-wide">Reddit 评论</p>
         </div>
         <div className="ml-auto text-[#ff4500] opacity-20">
