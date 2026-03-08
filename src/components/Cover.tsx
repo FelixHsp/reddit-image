@@ -1,12 +1,15 @@
 import React from 'react';
 import type { ThreadData } from '../types';
 import { MessageSquare, ArrowUp, Share } from 'lucide-react';
+import { getSubredditIcon } from '../subredditAssets';
 
 interface CoverProps {
   data: ThreadData;
 }
 
 export const Cover: React.FC<CoverProps> = ({ data }) => {
+  const subredditIcon = getSubredditIcon(data.subreddit);
+
   return (
     <div 
       className="w-[800px] h-[1066px] bg-[#ff4500] relative overflow-hidden flex flex-col items-center"
@@ -32,7 +35,7 @@ export const Cover: React.FC<CoverProps> = ({ data }) => {
         {/* Post Meta */}
         <div className="flex items-center gap-3 text-gray-500 text-lg mb-4">
           <div className="w-8 h-8 rounded-full overflow-hidden">
-            <img src="/ask.webp" alt="subreddit" className="w-full h-full object-cover" />
+            <img src={subredditIcon} alt={data.subreddit} className="w-full h-full object-cover" />
           </div>
           <span className="font-medium text-gray-800">{data.subreddit}</span>
           <span>•</span>
